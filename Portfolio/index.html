@@ -44,24 +44,34 @@
         </div>
 
         <div id="portfolio">
+
+            <div id="portfolio-modal" class="modal">
+                
+                <div class="modal-content">
+                
+                  <img src="" alt="" class="modal-image">
+                  <div class="modal-text">
+                    <h3></h3> <p></p> <a href="#">Github</a>
+                    
+                  </div>
+                  <div class="modal-images"></div>
+                  <span class="close-modal">&times;</span>
+                </div>
+              </div>
+
             <section class="content">
                 <h1>Portfolio</h1>
 
                 <!-- Friberg Car Rentals -->
                 <div class="grid-container">
-                    
-                    <div id="portfolio-modal" class="modal">
-                        <div class="modal-content">
-                          <span class="close-modal">&times;</span>
-                          <img src="" alt="" class="modal-image">
-                        </div>
-                      </div>
 
                     <div class="grid-item">
-                        <img src="media/carrental.png" alt="FribergCarRentalsLogo">
-                        <p>test test</p>
+                        <img src="media/carrental.png" alt="FribergCarRentalsLogo"
+                        data-title="Friberg Car Rental Website"
+                        data-description="A website showcasing Friberg Car Rentals' fleet and services."
+                        data-link="https://www.fribergcarrentals.com"
+                        data-images="media/fribergcarrental.png, media/fribergcarrental.png, media/fribergcarrental.png, media/fribergcarrental.png">
                     </div>
-                    
 
                     <!-- Friberg Car Rentals -->
                     <div class="grid-item">
@@ -112,10 +122,41 @@ gridItems.forEach(item => {
     // Get the image source and alt text
     const imageSrc = this.querySelector("img").src;
     const imageAlt = this.querySelector("img").alt;
+    const imageTitle = this.querySelector("img").dataset.title;
+    const imageDescription = this.querySelector("img").dataset.description;
+    const imageLink = this.querySelector("img").dataset.link;
+    const additionalImages = this.querySelector("img").dataset.images; // Assuming comma-separated image sources   
 
     // Set the image source and alt for the modal image
     modalImage.src = imageSrc;
     modalImage.alt = imageAlt;
+
+    const modalContent = document.querySelector(".modal-content");
+        modalContent.querySelector("h3").textContent = imageTitle; // Update title
+        modalContent.querySelector("p").textContent = imageDescription; // Update description (if available)
+
+        // Update Link (if available)
+        const modalLink = modalContent.querySelector("a");
+        if (imageLink) {
+            modalLink.href = imageLink;
+            modalLink.style.display = "inline"; // Show link if data-link exists
+        } else {
+            modalLink.style.display = "none"; // Hide link if no data-link
+        }
+
+        // Populate additional images (if available)
+        const modalImagesContainer = modalContent.querySelector(".modal-images");
+        modalImagesContainer.innerHTML = ""; // Clear existing images
+
+        if (additionalImages) {
+            const imageList = additionalImages.split(","); // Split comma-separated sources
+            imageList.forEach(imageSource => {
+                const imageElement = document.createElement("img");
+                imageElement.src = imageSource.trim(); // Remove leading/trailing spaces
+                imageElement.alt = "Additional Image";  // Set a default alt text
+                modalImagesContainer.appendChild(imageElement);
+            });
+        }
 
     // Show the modal
     modal.style.display = "block";
